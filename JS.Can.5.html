@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS Canvas 02</title>
+    <style>
+        section{
+            width: 70%;
+            margin: 0 auto;
+        }
+
+    
+    </style>
+</head>
+<body>
+<section>
+        <h1>JS Canvas 02</h1>
+            <p>Toolbox</p>
+            <canvas id="myCanvas0" width="600" height="150" style="outline: 1px solid black">
+            </canvas>
+            <button type="button" id="play">Play!</button>
+</section>
+<script>
+/*globals document, window */
+"use strict";
+var $ = function (foo) {
+    return document.getElementById(foo);    // save keystrokes
+};
+
+
+//Canvas
+let Canvas = {
+    init(canvasId, color) {
+        this.canvas = $(canvasId);
+        this.context = this.canvas.getContext("2d");
+        this.color = color;
+        this.prep();
+    },
+    prep() {
+        this.context.fillStyle = this.color;
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    clear() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    getContext() {
+        return this.context;
+    },
+    getHeight() {
+        return this.canvas.height;
+    },
+    getWidth() {
+        return this.canvas.width;
+    }
+};
+
+//Shape
+let Shape = {
+    init(cv, x, y, width, height, color) {
+        this.ctx = cv.context;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    },
+    cirkel(cv, x2, y2, r, w, math, boo, color){
+        this.ctx = cv.context;
+        this.x = x2;
+        this.y = y2;
+        this.r = r;
+        this.w = w;
+        this.math = math;
+        this.boo = boo;
+        this.color = color;
+    },
+
+    draw() {
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, this.w, this.math, this.boo);
+        this.ctx.fill();
+    }
+};
+
+
+//function
+
+let initialize = function () {
+    let can = Object.create(Canvas);
+    can.init('myCanvas0', 'silver');
+    can.canvas.addEventListener('click', hittest);
+
+    // create objects
+    let rect = Object.create(Shape);
+    rect.init(can, 10, 10, 100, 100, '#FFF7ED');
+        let c1 = Object.create(Shape);
+        c1.cirkel(can, 60, 60, 10, 0, Math.PI*2, false, '#8D86E3');
+    let shape2 = Object.create(Shape);
+    shape2.init(can, 120, 10, 100, 100, '#FFF7ED');
+        let c2 = Object.create(Shape);
+        c2.cirkel(can, 145, 35, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c22 = Object.create(Shape);
+        c22.cirkel(can, 195, 85, 10, 0, Math.PI*2, false, '#8D86E3');
+    let shape3 = Object.create(Shape);
+    shape3.init(can, 230, 10, 100, 100, '#FFF7ED');
+        let c3 = Object.create(Shape);
+        c3.cirkel(can, 255, 35, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c32 = Object.create(Shape);
+        c32.cirkel(can, 280, 60, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c33 = Object.create(Shape);
+        c33.cirkel(can, 305, 85, 10, 0, Math.PI*2, false, '#8D86E3');
+    let shape4 = Object.create(Shape);
+    shape4.init(can, 340, 10, 100, 100, '#FFF7ED');
+        let c4 = Object.create(Shape);
+        c4.cirkel(can, 365, 35, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c42 = Object.create(Shape);
+        c42.cirkel(can, 365, 85, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c43 = Object.create(Shape);
+        c43.cirkel(can, 415, 85, 10, 0, Math.PI*2, false, '#8D86E3');
+        let c44 = Object.create(Shape);
+        c44.cirkel(can, 415, 35, 10, 0, Math.PI*2, false, '#8D86E3');
+    let shape5 = Object.create(Shape);
+    shape5.init(can, 450, 10, 100, 100, '#FFF7ED');
+    
+    //push it
+    shapes.push(rect);
+        shapes.push(c1);
+    shapes.push(shape2);
+        shapes.push(c2);
+        shapes.push(c22);
+    shapes.push(shape3);
+        shapes.push(c3);
+        shapes.push(c32);
+        shapes.push(c33);
+    shapes.push(shape4);
+        shapes.push(c4);
+        shapes.push(c42);
+        shapes.push(c43);
+        shapes.push(c44);
+    shapes.push(shape5);
+    repeater(can, shapes);
+};
+
+let redraw = function (cv, arr) {
+    cv.clear();
+    cv.prep();
+    // loop through array and draw
+    for (let shape of arr) {
+        shape.draw();
+    }
+};
+
+let repeater = function (cv, arr) {
+    // if this is an animation build a setInterval loop here
+    // if not, just draw
+    redraw(cv, arr);
+};
+
+let hittest = function (ev) {
+    for (let shape of shapes) {
+        let cx = shape.ctx;
+        cx.beginPath();
+        cx.rect(shape.x, shape.y, shape.width, shape.height);
+        //cx.arc(shape.x2, shape.y2, shape.r, shape.w, shape.math, shape.boo);
+        cx.closePath();
+
+
+        let bb = this.getBoundingClientRect();    // canvas size and pos
+        // mouse to canvas coordinates
+        let x = (ev.clientX - bb.left) * (this.width / bb.width);
+        let y = (ev.clientY - bb.top) * (this.height / bb.height);
+        if (cx.isPointInPath(x, y)) {
+            cx.fillStyle = (cx.fillStyle === "#FFF7ED") ? "#9CFF87" : "#FFF7ED";
+            cx.fill();
+            shape.color = cx.fillStyle;
+            // window.alert("hit: "+x+","+y);
+        } else {
+            // window.alert("nohit: "+x+","+y);
+        }
+        // console.log(shape);
+    }
+};
+
+let shapes = [];
+let shapeDice = [];
+
+window.addEventListener('load', initialize);
+
+/*
+//Play function
+document.getElementById("play").addEventListener('click', play);
+
+//Array for de 5 terninger
+let dice = [0, 0, 0, 0, 0];
+
+//Array for at låse terninger
+let shadow = [false, false, false, false, false];
+//Kast terningerne
+var roll = function(n) {
+	return Math.floor(Math.random() * 6) + 1;
+    alert('hej');
+} 
+
+var play = function(arr, arrs, res) {
+	for (let i = 0; i < arr.length; i++) {
+		if (!arrs[i]) {
+			arr[i] = roll(6);
+		}
+	}
+
+	res = [0, 0, 0, 0, 0, 0, 0];
+	console.log(arr);
+	for (let i = 0; i < arr.length; i++) {
+		res[0] += arr[i];
+		res[arr[i]] += 1;
+	}
+	console.log(res);
+	return res;
+};
+
+//Slår terning 3 gange og giver besked hvis man ikke kan slå mere
+let count = 0;
+let sum = 0;
+function clicks() {
+	if (count < 3) {
+		  result = play(dice, shadow, result);
+			count++;
+			let button = $('btn');
+			let display = $('displayTal');
+			display.innerHTML = "Du har kastet terningerne " + count + " " + "gange ud af 3 mulige";
+	}
+}
+
+
+
+
+*/
+
+
+</script>
+</body>
+</html>

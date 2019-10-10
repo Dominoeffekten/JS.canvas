@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS Canvas 01</title>
+</head>
+<body>
+
+        <h1>JS Canvas 01</h1>
+        <p> Second example step in a gentle intro. Let us try a polygon. </p>
+        <canvas id="myCanvas" width="300" height="300" style="outline: 1px solid #28C6FF;">
+        </canvas>
+
+
+<script>
+/*globals document, window */
+'use strict';
+var $ = function (foo) {
+    return document.getElementById(foo);    // save keystrokes
+};
+/* 
+ * function drawing a polygon 
+ */
+let poly = function () {
+    let canvas = $('myCanvas');
+    if (canvas.getContext){
+        var can = canvas.getContext('2d');
+        
+        can.beginPath();
+        can.moveTo(80, 180);
+        can.lineTo(180, 80);
+        can.lineTo(80, 60);
+        can.strokeStyle = '#3CE877';
+        can.lineWidth = '10';
+        can.closePath();
+        can.stroke();
+    }
+};
+
+window.addEventListener('load', poly);
+
+
+
+</script>
+</body>
+</html>

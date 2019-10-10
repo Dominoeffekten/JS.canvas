@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS Canvas 02</title>
+    <style>
+        section{
+            width: 70%;
+            margin: 0 auto;
+        }
+        #right{
+            float: right;
+        }
+        #left{
+            float: left;
+        }
+
+    
+    </style>
+</head>
+<body>
+<section>
+        <h1>JS Canvas 02</h1>
+        <article id="right">
+            <p>Toolbox</p>
+            <canvas id="myCanvas" width="400" height="500" style="outline: 1px solid #28C6FF;">
+            </canvas>
+        </article>
+        <article id="left">
+            <p>Copy Cat</p>
+            <canvas id="yourCanvas" style="outline: 1px solid #FF7E42;">
+            </canvas>
+            <form>
+                Height: <input name="number" type="number" id="height">
+                Width: <input name="number" type="number" id="width">
+                <button type="button" id="go">Go!</button>
+            </form>
+        </article>
+
+</section>
+<script>
+/*globals document, window */
+"use strict";
+var $ = function (foo) {
+    return document.getElementById(foo);    // save keystrokes
+};
+
+
+//Canvas
+let Canvas = {
+    init(canvasId, color) {
+        this.canvas = $(canvasId);
+        this.context = this.canvas.getContext("2d");
+        this.color = color;
+        this.prep();
+    },
+    prep() {
+        this.context.fillStyle = this.color;
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        //this.context.fillArc(0, 0, this.canvas.width, this.canvas.height);
+    },
+    clear() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //this.context.clearArc(0, 0, this.canvas.width, this.canvas.height);
+    },
+    getContext() {
+        return this.context;
+    },
+    getHeight() {
+        return this.canvas.height;
+    },
+    getWidth() {
+        return this.canvas.width;
+    }
+
+};
+
+//Shape
+let Shape = {
+    init(cv, x, y, width, height, color) {
+        this.ctx = cv.context;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    },
+    cirkel(cv, x2, y2, r, w, math, boo, color){
+        this.ctx = cv.context;
+        this.x = x2;
+        this.y = y2;
+        this.r = r;
+        this.w = w;
+        this.math = math;
+        this.boo = boo;
+        this.color = color;
+    },
+
+    draw() {
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = this.color;
+        this.ctx.arc(this.x, this.y, this.r, this.w, this.math, this.boo);
+        this.ctx.fill();
+    }
+};
+
+
+//function
+let initialize = function () {
+    can = Object.create(Canvas);
+    can.init('myCanvas', 'transparent');
+    yourCanvas = Object.create(Canvas);
+    yourCanvas.init('yourCanvas', 'transparent');
+    can.canvas.addEventListener('click', hittest);
+
+    // create objects
+    let rect = Object.create(Shape);
+    rect.init(can, 250, 10, 120, 40, '#518FD8');
+    let shape2 = Object.create(Shape);
+    shape2.init(can, 290, 60, 80, 60, '#8BC5F3');
+    let shape3 = Object.create(Shape);
+    shape3.init(can, 200, 130, 170, 30, '#95F0FE');
+    let shape4 = Object.create(Shape);
+    shape4.init(can, 200, 175, 170, 70, '#788FFB');
+    let shape5 = Object.create(Shape);
+    shape5.cirkel(can, 280, 260, 90, 0, Math.PI, false, '#8D86E3');
+    
+    //push it
+    shapes.push(rect);
+    shapes.push(shape2);
+    shapes.push(shape3);
+    shapes.push(shape4);
+    shapes.push(shape5);
+    repeater(can, shapes);
+};
+
+let redraw = function (cv, arr) {
+    cv.clear();
+    cv.prep();
+    // loop through array and draw
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].draw();
+    }
+};
+
+let repeater = function (cv, arr) {
+    // if this is an animation build a setInterval loop here
+    // if not, just draw
+    redraw(cv, arr);
+};
+
+let hittest = function (ev) {
+    for (let shape of shapes) {
+        let cx = shape.ctx;
+        if(shape.r){
+            cx.beginPath();
+            cx.arc(shape.x, shape.y, shape.r, shape.w, shape.math, shape.boo, shape.color);
+            cx.closePath();
+        } else {
+            cx.beginPath();
+            cx.rect(shape.x, shape.y, shape.width, shape.height, shape.color);
+            cx.closePath();
+        }
+
+        let bb = this.getBoundingClientRect();    // canvas size and pos
+        // mouse to canvas coordinates
+        let x = (ev.clientX - bb.left) * (this.width / bb.width);
+        let y = (ev.clientY - bb.top) * (this.height / bb.height);
+        
+        if (cx.isPointInPath(x, y)) {
+            yourCanvas.canvas.addEventListener('click', function room(e) {
+                let bb1 = this.getBoundingClientRect(); 
+                let x1 = (e.clientX - bb1.left) * (this.width / bb1.width);
+                let y1 = (e.clientY - bb1.top) * (this.height / bb1.height);
+                
+                let newShape = Object.create(Shape);
+
+                newShape.init(yourCanvas, x1, y1, shape.width, shape.height, shape.color);
+                shapes2.push(newShape);
+                can.canvas.removeEventListener('click', hittest);
+                repeater(yourCanvas, shapes2);
+                yourCanvas.canvas.removeEventListener('click', room);
+                can.canvas.addEventListener('click', hittest);
+
+
+
+
+                
+            });
+            //window.alert("hit: "+x+","+y);
+        } else {
+            // window.alert("nohit: "+x+","+y);
+        }
+        // console.log(shape);
+    }
+};
+
+let size = function(){
+    can = Object.create(Canvas);
+    can.init('yourCanvas', 'transparent');
+    
+    yourCanvas.canvas.height = $('height').value;
+    yourCanvas.canvas.width = $('width').value;
+    height.value = "";
+    width.value = "";
+};
+
+let can;
+let yourCanvas;
+let shapes = [];
+let shapes2 = [];
+
+document.getElementById("go").addEventListener('click', size);
+
+window.addEventListener('load', initialize);
+
+
+
+
+
+</script>
+</body>
+</html>

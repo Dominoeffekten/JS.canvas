@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>JS Canvas 05</title>
+    <title>JS Canvas 02</title>
     <style>
         section{
             width: 70%;
@@ -117,96 +117,39 @@ let initialize = function () {
     //Play function
 document.getElementById("play").addEventListener("click", play);
 
-var counts = [0, 0, 0, 0, 0, 0];
-
-var results = [];
-
+//Sammenkoble shapes and random number
+//shapes = 
     function play(n) {
-        //sletter canvas og laver nyt
-        //redraw();
-
-        //Random number
         var roll = Math.floor(Math.random() * 6) + 1;
-
-        //giver 6 tal
-        for (var i = 0; i <= 4; i++) {
-            var result = roll;
-            counts[result] = counts[result];
-            results.push(result);
-        }
-            console.log(results);  
-            console.log(counts);
-
-
-
-
-
+        console.log(roll)
 
         for (var i = 0; i < shapes.length; i++) {
-
-            if (roll%2==!0){ //ulige nr. -> lav en prik
-                alert('ulige');
+            if (roll%2==!0){ //ulige nr.
                 let c1 = Object.create(Shape);
-                c1.cirkel(can, 60, 60, 10, 0, Math.PI*2, false, '#E535E5');
+                c1.cirkel(can, 60, 60, 10, 0, Math.PI*2, false, '#8D86E3');
                 shapes.push(c1);
                 repeater(can, shapes);
-
-            } if (roll >= 2){ //Hvis den er over 2
+            }
+            if (roll >= 2){ //Hvis den er over 2
                 alert('over 2');
                 let c2 = Object.create(Shape);
-                c2.cirkel(can, 35, 35, 10, 0, Math.PI*2, false, '#35E5E2');
+                c2.cirkel(can, 35, 35, 10, 0, Math.PI*2, false, '#8D86E3');
                 let c22 = Object.create(Shape);
-                c22.cirkel(can, 85, 85, 10, 0, Math.PI*2, false, '#35E5E2');
+                c22.cirkel(can, 85, 85, 10, 0, Math.PI*2, false, '#8D86E3');
                 shapes.push(c2);
                 shapes.push(c22);
                 repeater(can, shapes);
-
-            } if (roll >= 4){ //Hvis den er over 4
+            }
+            if (roll >= 4){ //Hvis den er over 4
                 alert('over 4');
-                let c4 = Object.create(Shape);
-                c4.cirkel(can, 35, 35, 10, 0, Math.PI*2, false, '#4FE85D');
-                let c44 = Object.create(Shape);
-                c44.cirkel(can, 35, 85, 10, 0, Math.PI*2, false, '#4FE85D');
-                let c444 = Object.create(Shape);
-                c444.cirkel(can, 85, 35, 10, 0, Math.PI*2, false, '#4FE85D');
-                let c4444 = Object.create(Shape);
-                c4444.cirkel(can, 85, 85, 10, 0, Math.PI*2, false, '#4FE85D');
-                shapes.push(c4);
-                shapes.push(c44);
-                shapes.push(c444);
-                shapes.push(c4444);
-                repeater(can, shapes);
-
-            } if (roll === 6){ //Hvis den er over 6
+            }
+            if (roll === 6){ //Hvis den er over 6
                 alert('over 6');
-                let c6 = Object.create(Shape);
-                c6.cirkel(can, 35, 35, 10, 0, Math.PI*2, false, '#E84FA2');
-                let c66 = Object.create(Shape);
-                c66.cirkel(can, 85, 85, 10, 0, Math.PI*2, false, '#E84FA2');
-                let c666 = Object.create(Shape);
-                c666.cirkel(can, 85, 35, 10, 0, Math.PI*2, false, '#E84FA2');
-                let c6666 = Object.create(Shape);
-                c6666.cirkel(can, 35, 85, 10, 0, Math.PI*2, false, '#E84FA2');
-                let c66666 = Object.create(Shape);
-                c66666.cirkel(can, 35, 60, 10, 0, Math.PI*2, false, '#E84FA2');
-                let c666666 = Object.create(Shape);
-                c666666.cirkel(can, 85, 60, 10, 0, Math.PI*2, false, '#E84FA2');
-                shapes.push(c6);
-                shapes.push(c66);
-                shapes.push(c666);
-                shapes.push(c6666);
-                shapes.push(c66666);
-                shapes.push(c666666);
-                repeater(can, shapes);
             }
             break;
         }
-        
     }
 };
-
-//Array for at låse terninger
-let shadow = [false, false, false, false, false];
 
 
 let redraw = function (cv, arr) {
@@ -243,11 +186,8 @@ let hittest = function (ev) {
         let x = (ev.clientX - bb.left) * (this.width / bb.width);
         let y = (ev.clientY - bb.top) * (this.height / bb.height);
         if (cx.isPointInPath(x, y)) {
-            alert('Av.. Du klikkede på mig');
-            cx.fillStyle = (cx.fillStyle === '#FFF7ED') ? "#9CFF87; shadow[i] = false;" : "#9CFF87; shadow[i] = false;";
-            
-            
-            
+            alert('Av.. Du klikkede på mig')
+            cx.fillStyle = (cx.fillStyle === '#FFF7ED') ? "#9CFF87" : "#9CFF87";
             cx.fill();
             shape.color = cx.fillStyle;
             // window.alert("hit: "+x+","+y);

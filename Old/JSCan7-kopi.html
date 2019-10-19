@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>tic tac toe</title>
+    <style>
+    #mine{
+        width: 350px;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+    <div id="mine">
+        <canvas id="c1" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c2" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c3" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas><br>
+        <canvas id="c4" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c5" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c6" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas><br>
+        <canvas id="c7" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c8" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+        <canvas id="c9" width="100" height="100" style="outline: 1px solid #28C6FF;"></canvas>
+    </div>
+</body>
+<script>
+'use strict';
+var $ = function (foo) {
+    return document.getElementById(foo);
+};
+/*
+let board = function () {
+    let canvas = $('myCanvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+
+        ctx.beginPath();
+        ctx.moveTo(0, 100);
+        ctx.lineTo(100, 0);
+        ctx.strokeStyle = 'purple';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(100, 100);
+        ctx.strokeStyle = 'purple';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+
+       // ctx.beginPath();
+        //ctx.arc(150, 25, 20, 0, Math.PI * 2, true);
+        //ctx.strokeStyle = 'red';
+       // ctx.stroke(); 
+    }
+}
+
+let tiles = [1, 2, 3, 4, 5, 6, 7, 8];
+*/
+//Rikke
+//Canvas
+let Canvas = {
+    init(canvasId, color) {
+        this.canvas = $(canvasId);
+        this.context = this.canvas.getContext("2d");
+        this.color = color;
+        this.prep();
+    },
+    prep() {
+        this.context.fillStyle = this.color;
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        //this.context.fillArc(0, 0, this.canvas.width, this.canvas.height);
+    },
+    clear() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //this.context.clearArc(0, 0, this.canvas.width, this.canvas.height);
+    },
+    getContext() {
+        return this.context;
+    },
+    getHeight() {
+        return this.canvas.height;
+    },
+    getWidth() {
+        return this.canvas.width;
+    }
+
+};
+
+//Shape
+let Shape = {
+    firkant(cv, x, y, width, height, color) {
+        this.ctx = cv.context;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+    },
+    cirkel(cv, x2, y2, r, w, math, boo, color){
+        this.ctx = cv.context;
+        this.x = x2;
+        this.y = y2;
+        this.r = r;
+        this.w = w;
+        this.math = math;
+        this.boo = boo;
+        this.color = color;
+    },
+    line(cv, x, y, from, to, color) {
+        this.ctx = cv.context;
+        this.x = x;
+        this.y = y;
+        this.from = from;
+        this.to = to;
+        this.color = color;
+    },
+
+    draw() {
+        //firkant
+        //this.ctx.fillStyle = this.color;
+        this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+        //cirkel
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = this.color;
+        this.ctx.arc(this.x, this.y, this.r, this.w, this.math, this.boo);
+       // this.ctx.lineWidth = 3;
+        this.ctx.stroke();
+        //streger
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y);
+        this.ctx.lineTo(this.from, this.to);
+        this.ctx.stroke();
+       // this.ctx.lineWidth = 3;
+        this.ctx.strokeStyle = this.color;
+    }
+};
+
+
+//function
+let initialize = function () {
+    //lav canvaser
+    let can = Object.create(Canvas);
+    can.init('c1', 'transparent');
+    
+    let c2 = Object.create(Canvas);
+    c2.init('c2', 'transparent');
+    
+    let c3 = Object.create(Canvas);
+    c3.init('c3', 'transparent');
+    
+    let c4 = Object.create(Canvas);
+    c4.init('c4', 'transparent');
+    
+    let c5 = Object.create(Canvas);
+    c5.init('c5', 'transparent');
+
+    let c6 = Object.create(Canvas);
+    c6.init('c6', 'transparent');
+
+    let c7 = Object.create(Canvas);
+    c7.init('c7', 'transparent');
+
+    let c8 = Object.create(Canvas);
+    c8.init('c8', 'transparent');
+
+    let c9 = Object.create(Canvas);
+    c9.init('c9', 'transparent');
+
+
+    workCanvas.push(can);
+    workCanvas.push(c2);
+    workCanvas.push(c3);
+    workCanvas.push(c4);
+    workCanvas.push(c5);
+    workCanvas.push(c6);
+    workCanvas.push(c7);
+    workCanvas.push(c8);
+    workCanvas.push(c9);
+
+    
+    can.canvas.addEventListener('click', hittest);
+    c2.canvas.addEventListener('click', hittest);
+    c3.canvas.addEventListener('click', hittest);
+    c4.canvas.addEventListener('click', hittest);
+    c5.canvas.addEventListener('click', hittest);
+    c6.canvas.addEventListener('click', hittest);
+    c7.canvas.addEventListener('click', hittest);
+    c8.canvas.addEventListener('click', hittest);
+    c9.canvas.addEventListener('click', hittest);
+
+    // create objects
+    //linjer
+    let one = Object.create(Shape);
+    one.line(can, 0, 0, 100, 100, '#518FD8');
+    let two = Object.create(Shape);
+    two.line(can, 0, 100, 100, 0, '#518FD8');
+    //cirkel
+    let cirkel = Object.create(Shape);
+    cirkel.cirkel(can, 50, 50, 40, 0, Math.PI*2, false, '#8D86E3');
+    
+    //push it
+    shapes.push(one);
+    shapes.push(two);
+    shapes.push(cirkel);
+
+
+
+    repeater(can, shapes);
+};
+
+let redraw = function (cv, arr) {
+    cv.clear();
+    cv.prep();
+    // loop through array and draw
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].draw();
+    }
+};
+
+let repeater = function (cv, arr) {
+    // if this is an animation build a setInterval loop here
+    // if not, just draw
+    redraw(cv, arr);
+};
+//Klik
+
+var count = 0;
+
+let hittest = function (ev) {
+    for (let shape of shapes) {
+        let cx = shape.ctx;
+        if(shape.r){
+            cx.beginPath();
+            cx.arc(shape.x, shape.y, shape.r, shape.w, shape.math, shape.boo, shape.color);
+            cx.closePath();
+        } if(shape.from){
+            cx.beginPath();
+            cx.moveTo(this.x, this.y);
+            cx.lineTo(this.from, this.to);
+            cx.strokeStyle = this.color;
+            cx.stroke();
+            cx.closePath();
+        } else {
+            cx.beginPath();
+            cx.rect(shape.x, shape.y, shape.width, shape.height, shape.color);
+            cx.closePath();
+        }
+
+        let bb = this.getBoundingClientRect();    // canvas size and pos
+        // mouse to canvas coordinates
+        let x = (ev.clientX - bb.left) * (this.width / bb.width);
+        let y = (ev.clientY - bb.top) * (this.height / bb.height);
+        
+        if (cx.isPointInPath(x, y)) {
+            count++
+            console.log(count)
+            for(var i = 0; i < workCanvas.length; i++){
+                if(count%2 == 0) {
+                    
+                    shapes[1];
+                    console.log(shapes[1]);
+                    break;
+                }else{
+                    shapes[0];
+                    console.log(shapes[0]);
+                    break;
+                }
+                
+                
+                //can.canvas.removeEventListener('click', hittest);
+               
+            } // loop
+            //window.alert("hit: "+x+","+y);
+        } else {
+            // window.alert("nohit: "+x+","+y);
+        }
+        // console.log(shape);
+    } //loop
+};
+
+
+let can;
+let shapes = [];
+let workCanvas = [];
+
+window.addEventListener('load', initialize);
+
+
+</script>
+</html>

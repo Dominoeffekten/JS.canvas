@@ -1,0 +1,8 @@
+#myCanvas {
+    width: 800px;
+    height: 800px;
+    outline: 8px solid magenta;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 3.5%;
+}

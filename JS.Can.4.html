@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>JS Canvas 02</title>
+    <title>JS Canvas 04</title>
     <style>
         section{
             width: 70%;
@@ -22,7 +22,7 @@
 </head>
 <body>
 <section>
-        <h1>JS Canvas 02</h1>
+        <h1>JS Canvas 04</h1>
         <article id="right">
             <p>Toolbox</p>
             <canvas id="myCanvas" width="400" height="500" style="outline: 1px solid #28C6FF;">
@@ -189,17 +189,27 @@ let hittest = function (ev) {
                     let newDis = dis - yourCanvas.canvas.width;
                     newShape.x = newShape.x - newDis;
                 }
+                //Rammer den kanten? Så skal den rykke sig
                 if(newShape.y + newShape.height > yourCanvas.canvas.height) {
                     //bounce
                     let dis = newShape.y + newShape.height;
                     let newDis = dis - yourCanvas.canvas.height;
                     newShape.y = newShape.y - newDis;
                 }
+                
+                //Rammer den en anden boks?
+                for (var i = 0; i < newShape.length; i++) {
+                    var existing = newShape[i];
+                    //newShape.y //left top
+                    existing.rt = newShape.y + newShape.height; //right top 
+                    existing.lb = newShape.x + newShape.width; //left bottom
+                    newShape.rb = newShape.lb + newShape.width; //right bottom
+                        if(newShape.y >= existing.rt || existing.lb >= newShape.rb){
+                            alert('hello');
+                            console.log('hello');
+                        }
+                    }
 
-                if(){
-
-                }
-               
                
 
                 
